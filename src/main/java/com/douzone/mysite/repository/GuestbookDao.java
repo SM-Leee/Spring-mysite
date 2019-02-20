@@ -10,12 +10,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.douzone.mysite.exception.GuestbookDaoException;
 import com.douzone.mysite.vo.GuestbookVo;
 
 @Repository
 public class GuestbookDao {
 
-	public List<GuestbookVo> getList(int page) {
+	public List<GuestbookVo> getList(int page) throws GuestbookDaoException{
 		List<GuestbookVo> list = new ArrayList<GuestbookVo>();
 
  		Connection conn = null;
@@ -57,7 +58,7 @@ public class GuestbookDao {
  				list.add(vo);
 			}
 		} catch (SQLException e) {
-			System.out.println("error :" + e);
+			throw new GuestbookDaoException("리스트 가져오기 오류");
 		} finally {
 			// 자원 정리
 			try {
@@ -71,14 +72,14 @@ public class GuestbookDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new GuestbookDaoException("리스트 가져오기 오류");
 			}
 		}
 
  		return list;
 	}
 	
-	public int delete(GuestbookVo guestbookVo) {
+	public int delete(GuestbookVo guestbookVo) throws GuestbookDaoException{
 		int result = 0;
 		
 		Connection conn = null;
@@ -96,7 +97,7 @@ public class GuestbookDao {
 			result = pstmt.executeUpdate();
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new GuestbookDaoException("방명록 글 삭제 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -106,14 +107,14 @@ public class GuestbookDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new GuestbookDaoException("방명록 글 삭제 오류");
 			}
 		}
 		
 		return result;
 	}
 	
-	public long insert(GuestbookVo guestbookVo) {
+	public long insert(GuestbookVo guestbookVo) throws GuestbookDaoException{
 		long result = 0;
 		
 		Connection conn = null;
@@ -144,7 +145,7 @@ public class GuestbookDao {
 			
 						
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new GuestbookDaoException("방명록 글 추가 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -154,14 +155,14 @@ public class GuestbookDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new GuestbookDaoException("방명록 글 추가 오류");
 			}
 		}
 		
 		return result;
 	}
 	
-	public List<GuestbookVo> getList(){
+	public List<GuestbookVo> getList() throws GuestbookDaoException{
 		List<GuestbookVo> list = new ArrayList<GuestbookVo>();
 		
 		Connection conn = null;
@@ -194,7 +195,7 @@ public class GuestbookDao {
 			
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new GuestbookDaoException("방명록 리스트 불러오기 오류");
 		} finally {
 			try {
 				if(rs != null) {
@@ -207,7 +208,7 @@ public class GuestbookDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new GuestbookDaoException("방명록 리스트 불러오기 오류");
 			}
 		}
 		

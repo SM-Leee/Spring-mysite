@@ -8,13 +8,14 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Repository;
 
+import com.douzone.mysite.exception.GuestbookDaoException;
 import com.douzone.mysite.exception.UserDaoException;
 import com.douzone.mysite.vo.UserVo;
 
 @Repository
 public class UserDao {
 	
-	public UserVo get(String email) {
+	public UserVo get(String email) throws UserDaoException{
 		UserVo result = null;
 		
 		Connection conn = null;
@@ -40,7 +41,7 @@ public class UserDao {
 			}
 				
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new GuestbookDaoException();
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -53,7 +54,7 @@ public class UserDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new GuestbookDaoException();
 			}
 		}
 		

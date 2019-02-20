@@ -10,14 +10,14 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.douzone.mysite.exception.UserDaoException;
+import com.douzone.mysite.exception.BoardDaoException;
 import com.douzone.mysite.vo.BoardVo;
 import com.douzone.mysite.vo.CommentVo;
 
 @Repository
 public class BoardDao {
 	
-	public boolean delete(CommentVo commentVo) {
+	public boolean delete(CommentVo commentVo) throws BoardDaoException{
 		boolean result = false;
 		
 		Connection conn = null;
@@ -35,7 +35,7 @@ public class BoardDao {
 			result = count == 1;
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new BoardDaoException("댓글 삭제 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -45,14 +45,14 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new BoardDaoException("댓글 삭제 오류");
 			}
 		}
 		
 		return result;
 	}
 	
-	public boolean update(BoardVo boardVo) {
+	public boolean update(BoardVo boardVo) throws BoardDaoException{
 		boolean result = false;
 		
 		Connection conn = null;
@@ -73,7 +73,7 @@ public class BoardDao {
 			result = count == 1;
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new BoardDaoException("글 수정 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -83,14 +83,14 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new BoardDaoException("글 수정 오류");
 			}
 		}
 		
 		return result;
 	}
 	
-	public boolean updateInsert(BoardVo boardVo) {
+	public boolean updateInsert(BoardVo boardVo) throws BoardDaoException{
 		boolean result = false;
 		
 		Connection conn = null;
@@ -119,7 +119,7 @@ public class BoardDao {
 			result = count == 1;
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new BoardDaoException("답글 달기 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -129,14 +129,14 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new BoardDaoException("답글 달기 오류");
 			}
 		}
 		
 		return result;
 	}
 	
-	public boolean delete(BoardVo boardVo) {
+	public boolean delete(BoardVo boardVo) throws BoardDaoException{
 		boolean result = false;
 		
 		Connection conn = null;
@@ -154,7 +154,7 @@ public class BoardDao {
 			result = count == 1;
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new BoardDaoException("글 삭제 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -164,14 +164,14 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new BoardDaoException("글 삭제 오류");
 			}
 		}
 		
 		return result;
 	}
 	
-	public boolean insert(BoardVo boardVo) {
+	public boolean insert(BoardVo boardVo) throws BoardDaoException{
 		boolean result = false;
 		
 		Connection conn = null;
@@ -202,7 +202,7 @@ public class BoardDao {
 			result = count == 1;
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new BoardDaoException("글 쓰기 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -212,13 +212,13 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new BoardDaoException("글 쓰기 오류");
 			}
 		}
 		
 		return result;
 	}
-	public boolean insert(CommentVo commentVo) throws UserDaoException{
+	public boolean insert(CommentVo commentVo) throws BoardDaoException{
 		boolean result = false;
 		
 		Connection conn = null;
@@ -249,7 +249,7 @@ public class BoardDao {
 			result = count == 1;
 			
 		} catch (SQLException e) {
-			throw new UserDaoException("댓글달기 오류");
+			throw new BoardDaoException("댓글달기 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -259,13 +259,13 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				throw new UserDaoException("댓글달기 오류");
+				throw new BoardDaoException("댓글달기 오류");
 			}
 		}
 		
 		return result;
 	}
-	public List<CommentVo> getListComment(int group_no, int order_no) {
+	public List<CommentVo> getListComment(int group_no, int order_no) throws BoardDaoException{
 		List<CommentVo> list = new ArrayList<CommentVo>();
 				
 		Connection conn = null;
@@ -304,7 +304,7 @@ public class BoardDao {
 			
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new BoardDaoException("댓글 리스트 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -317,12 +317,12 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new BoardDaoException("댓글 리스트 오류");
 			}
 		}
 		return list;
 	}
-	public BoardVo get(int group_no, int order_no) {
+	public BoardVo get(int group_no, int order_no) throws BoardDaoException{
 		BoardVo boardVo = null;
 		
 		Connection conn = null;
@@ -364,7 +364,7 @@ public class BoardDao {
 			
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new BoardDaoException("글 목록에 있는 글 읽기 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -377,13 +377,13 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new BoardDaoException("글 목록에 있는 글 읽기 오류");
 			}
 		}
 		return boardVo;
 	}
 	
-	public int count() {
+	public int count() throws BoardDaoException{
 		int count = 0;
 		
 		Connection conn = null;
@@ -401,7 +401,7 @@ public class BoardDao {
 			}
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new BoardDaoException("글 갯수 카운드 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -414,13 +414,13 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new BoardDaoException("글 갯수 카운드 오류");
 			}
 		}
 		
 		return count;
 	}
-	public int count(String kwd) {
+	public int count(String kwd) throws BoardDaoException{
 		int count = 0;
 		
 		Connection conn = null;
@@ -438,7 +438,7 @@ public class BoardDao {
 			}
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new BoardDaoException("글 갯수 카운드 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -451,13 +451,13 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new BoardDaoException("글 갯수 카운드 오류");
 			}
 		}
 		
 		return count;
 	}
-	public List<BoardVo> getList(int page, int board_count) {
+	public List<BoardVo> getList(int page, int board_count) throws BoardDaoException{
 		List<BoardVo> list = new ArrayList<BoardVo>();
 				
 		Connection conn = null;
@@ -510,7 +510,7 @@ public class BoardDao {
 			
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new BoardDaoException("페이징 및 리스트 불러오기 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -523,12 +523,12 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new BoardDaoException("페이징 및 리스트 불러오기 오류");
 			}
 		}
 		return list;
 	}
-	public List<BoardVo> getList(int page, int board_count, String kwd) {
+	public List<BoardVo> getList(int page, int board_count, String kwd) throws BoardDaoException{
 		List<BoardVo> list = new ArrayList<BoardVo>();
 				
 		Connection conn = null;
@@ -582,7 +582,7 @@ public class BoardDao {
 			
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new BoardDaoException("찾기 했을때 페이징 및 리스트 불러오기 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -595,7 +595,7 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new BoardDaoException("찾기 했을때 페이징 및 리스트 불러오기 오류");
 			}
 		}
 		return list;
