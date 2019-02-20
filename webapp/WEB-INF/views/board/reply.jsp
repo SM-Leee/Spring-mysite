@@ -36,7 +36,7 @@
 						</tr>
 					</table>
 					<div class="bottom">
-						<a href="${pageContext.servletContext.contextPath }/board?a=select">취소</a> <input type="submit" value="등록">
+						<a href="${pageContext.servletContext.contextPath }/board/view?order_no=${param.order_no}&group_no=${param.group_no}">취소</a> <input type="submit" value="등록">
 					</div>
 				</form>
 			</div>

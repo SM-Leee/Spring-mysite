@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.douzone.mysite.exception.UserDaoException;
 import com.douzone.mysite.vo.BoardVo;
 import com.douzone.mysite.vo.CommentVo;
 
@@ -217,7 +218,7 @@ public class BoardDao {
 		
 		return result;
 	}
-	public boolean insert(CommentVo commentVo) {
+	public boolean insert(CommentVo commentVo) throws UserDaoException{
 		boolean result = false;
 		
 		Connection conn = null;
@@ -248,7 +249,7 @@ public class BoardDao {
 			result = count == 1;
 			
 		} catch (SQLException e) {
-			System.out.println("Error : "+e);
+			throw new UserDaoException("댓글달기 오류");
 		} finally {
 			try {
 				if(pstmt != null) {
@@ -258,7 +259,7 @@ public class BoardDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new UserDaoException("댓글달기 오류");
 			}
 		}
 		

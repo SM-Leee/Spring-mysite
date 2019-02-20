@@ -7,13 +7,11 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.douzone.mysite.repository.BoardDao;
 import com.douzone.mysite.service.BoardService;
 import com.douzone.mysite.vo.BoardVo;
 import com.douzone.mysite.vo.CommentVo;
@@ -36,6 +34,33 @@ public class BoardController {
 		
 		return "board/list";
 		
+	}
+	@RequestMapping(value="/searchlist", method=RequestMethod.GET)
+	public String searchlist(
+			@RequestParam(value="page", required=false, defaultValue="0") int page,
+			@RequestParam(value="kwd", required=false, defaultValue="") String kwd,
+			Model model) {
+		
+		Map<String,Object> map = boardService.list(page, kwd);
+		model.addAllAttributes(map);
+		
+		return "/board/list";
+	}
+	
+	@RequestMapping(value="/searchlist", method=RequestMethod.POST)
+	public String list(
+			@RequestParam(value="page", required=false, defaultValue="0") int page,
+			@RequestParam(value="kwd", required=false, defaultValue="") String kwd,
+			Model model) {
+		//boardService.list(page, kwd);
+		Map<String,Object> map = boardService.list(page, kwd);
+		model.addAllAttributes(map);
+		System.out.println(kwd);
+		System.out.println(map.get("list"));
+		System.out.println(map.get("count"));
+		//model.addAttribute("kwd", kwd);
+		
+		return "/board/list";
 	}
 	
 	@RequestMapping(value="/write", method=RequestMethod.GET)
@@ -99,10 +124,24 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/writeComment", method=RequestMethod.POST)
-	public String writeComment(@ModelAttribute CommentVo commentVo) {
-		System.out.println(commentVo);
+	public String writeComment(
+			@ModelAttribute CommentVo commentVo,
+			Model model) {
 		boardService.writeComment(commentVo);
+		model.addAttribute("order_no", commentVo.getOrder_no());
+		model.addAttribute("group_no", commentVo.getGroup_no());
+		
 		return "redirect:/board/view";
 	}
 
+	@RequestMapping(value="/deleteComment", method=RequestMethod.GET)
+	public String deleteComment(
+			@ModelAttribute CommentVo commentVo
+			,Model model) {
+		boardService.deleteComment(commentVo);
+		model.addAttribute("order_no", commentVo.getOrder_no());
+		model.addAttribute("group_no", commentVo.getGroup_no());
+		
+		return "redirect:/board/view";
+	}
 }

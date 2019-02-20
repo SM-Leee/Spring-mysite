@@ -5,12 +5,16 @@ import java.io.StringWriter;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice		//AOP가 모든 컨트롤러에 몰린다.
 public class GlobalExceptionHandler {
+	
+	private static final Log LOG = LogFactory.getLog( GlobalExceptionHandler.class );
 	
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handlerException(
@@ -20,6 +24,7 @@ public class GlobalExceptionHandler {
 		// 1. 로깅 작업
 		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
+		LOG.error(errors.toString());
 		
 		// 2. 시스템 오류 안내페이지 전환
 		ModelAndView mav = new ModelAndView();

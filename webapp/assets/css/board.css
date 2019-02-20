@@ -71,6 +71,9 @@ input#kwd	{
 .board-form .tbl-ex input[ name='title' ] {
 	width: 480px;
 }
+.tbl-ex input[ name='comment' ] {
+	width: 380px;
+}
 .tbl-ex input[ name='contents' ] {
 	width: 380px;
 }

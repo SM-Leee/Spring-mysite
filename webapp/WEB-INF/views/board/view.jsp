@@ -55,7 +55,7 @@
 							<td>${cl.comment }</td>
 							<td><c:if test="${cl.user_no == authuser.no }">
 									<a
-										href="${pageContext.servletContext.contextPath }/board?a=deletecomment&no=${cl.no }&group_no=${param.group_no }&order_no=${param.order_no }"
+										href="${pageContext.servletContext.contextPath }/board/deleteComment?no=${cl.no }&group_no=${param.group_no }&order_no=${param.order_no }"
 										class="del"> 삭제 </a>
 								</c:if></td>
 						</tr>
@@ -68,7 +68,7 @@
 					<table class="tbl-ex">
 						<tr>
 							<td class="label">댓글</td>
-							<td><input type="text" name="contents" value=""></td>
+							<td><input type="text" name="comment" value=""></td>
 							<td><input type="submit" value="댓글"></td>
 						</tr>
 					</table>
