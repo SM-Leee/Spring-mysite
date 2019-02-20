@@ -47,7 +47,7 @@ public class BoardController {
 		return "/board/list";
 	}
 	
-	@RequestMapping(value="/searchlist", method=RequestMethod.POST)
+	@RequestMapping(value="/list", method=RequestMethod.POST)
 	public String list(
 			@RequestParam(value="page", required=false, defaultValue="0") int page,
 			@RequestParam(value="kwd", required=false, defaultValue="") String kwd,
@@ -55,9 +55,6 @@ public class BoardController {
 		//boardService.list(page, kwd);
 		Map<String,Object> map = boardService.list(page, kwd);
 		model.addAllAttributes(map);
-		System.out.println(kwd);
-		System.out.println(map.get("list"));
-		System.out.println(map.get("count"));
 		//model.addAttribute("kwd", kwd);
 		
 		return "/board/list";
