@@ -19,7 +19,8 @@
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="${pageContext.servletContext.contextPath }/board/list" method="post">
-					<input type="text" id="kwd" name="kwd" value=""> <input
+					<input type="text" id="kwd" name="kwd" value="">
+					<input type="hidden" id="page" name="page" value=""> <input
 						type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -63,16 +64,16 @@
 							<li>◀</li>
 						</c:when>
 						<c:when test="${start_page!=1 }">
-							<li><a href="${pageContext.servletContext.contextPath }/board/searchlist?page=${start_page-size_page }">◀</a></li>
+							<li><a href="${pageContext.servletContext.contextPath }/board/list?page=${start_page-size_page }&kwd=${kwd }">◀</a></li>
 						</c:when>								
 					</c:choose>
 					<c:forEach var="i" begin="${start_page }" end="${end_page }" step="1">
 						<c:choose>
 							<c:when test="${page == i }">
-							<li class="selected"><a href="${pageContext.servletContext.contextPath }/board/searchlist?page=${i }">${i }</a></li>
+							<li class="selected"><a href="${pageContext.servletContext.contextPath }/board/list?page=${i }&kwd=${kwd }">${i }</a></li>
 							</c:when>
 							<c:when test="${(page != i) and (total_page>=i) }">
-								<li><a href="${pageContext.servletContext.contextPath }/board/searchlist?page=${i }">${i }</a></li>
+								<li><a href="${pageContext.servletContext.contextPath }/board/list?page=${i }&kwd=${kwd }">${i }</a></li>
 							</c:when>
 							<c:otherwise>
 								<li>${i }</li>
@@ -81,7 +82,7 @@
 						</c:forEach>
 						<c:choose>
 						<c:when test="${end_page<total_page && size_page<total_page }">
-							<li><a href="${pageContext.servletContext.contextPath }/board/searchlist?page=${start_page+size_page }">▶</a></li>
+							<li><a href="${pageContext.servletContext.contextPath }/board/list?page=${start_page+size_page }&kwd=${kwd }">▶</a></li>
 						</c:when>	
 						<c:otherwise>
 							<li>▶</li>
@@ -98,16 +99,16 @@
 							<li>◀</li>
 						</c:when>
 						<c:when test="${start_page!=1 }">
-							<li><a href="${pageContext.servletContext.contextPath }/board/searchlist?page=${start_page-size_page }&kwd=${kwd }">◀</a></li>
+							<li><a href="${pageContext.servletContext.contextPath }/board/list?page=${start_page-size_page }&kwd=${kwd }">◀</a></li>
 						</c:when>								
 					</c:choose>
 					<c:forEach var="i" begin="${start_page }" end="${end_page }" step="1">
 						<c:choose>
 							<c:when test="${page == i }">
-							<li class="selected"><a href="${pageContext.servletContext.contextPath }/board/searchlist?page=${i }&kwd=${kwd }">${i }</a></li>
+							<li class="selected"><a href="${pageContext.servletContext.contextPath }/board/list?page=${i }&kwd=${kwd }">${i }</a></li>
 							</c:when>
 							<c:when test="${(page != i) and (total_page>=i) }">
-								<li><a href="${pageContext.servletContext.contextPath }/board/searchlist?page=${i }&kwd=${kwd }">${i }</a></li>
+								<li><a href="${pageContext.servletContext.contextPath }/board/list?page=${i }&kwd=${kwd }">${i }</a></li>
 							</c:when>
 							<c:otherwise>
 								<li>${i }</li>
@@ -116,7 +117,7 @@
 						</c:forEach>
 						<c:choose>
 						<c:when test="${end_page<total_page && size_page<total_page }">
-							<li><a href="${pageContext.servletContext.contextPath }/board/searchlist?page=${start_page+size_page }&kwd=${kwd }">▶</a></li>
+							<li><a href="${pageContext.servletContext.contextPath }/board/list?page=${start_page+size_page }&kwd=${kwd }">▶</a></li>
 						</c:when>	
 						<c:otherwise>
 							<li>▶</li>

@@ -30,8 +30,8 @@ public class UserService {
 		return userDao.get(userVo.getNo());
 	}
 	
-	public UserVo modify(UserVo userVo) {
-		return userDao.update(userVo);
+	public void modify(UserVo userVo) {
+		userDao.update(userVo);
 	}
 
 }

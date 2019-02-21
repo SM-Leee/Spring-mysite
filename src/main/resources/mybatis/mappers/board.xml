@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<select id="getTotalCount" parameterType="string" resultType="int">
+		<![CDATA[
+			select count(*) from board
+		]]>
+		<if test="_parameter != null and _parameter !=''">
+			<![CDATA[
+				where title like '%${_parameter }%'
+			]]>
+		</if>
+	</select>
+
+	<select id="getList" parameterType="map" resultType="boardvo">
+			<![CDATA[
+				select a.no, a.title, a.contents, a.write_date, a.hit, a.group_no, a.order_no, a.depth,a.user_no ,b.name as user_name  
+						from board a, user b 
+						where a.user_no = b.no
+			]]>
+			<if test="kwd != null and kwd !=''">
+				<![CDATA[
+					and title like '%${kwd }%'
+				]]>
+			</if>
+			<![CDATA[
+				order by group_no desc, order_no asc  
+				 	limit #{page }, #{board_count }
+			]]>
+
+	</select>
+	
+	<select id="getMaxGroupNo" resultType="long">
+		<![CDATA[	
+			select max(group_no)+1 from board
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="boardvo">
+		<choose>
+			<when test="group_no == 0">
+			<![CDATA[
+			insert into board 
+				values(null,#{title },#{contents }, now(),0,#{max_no },1,0,#{user_no })
+			]]>
+			</when>
+			<otherwise>
+			<![CDATA[
+			insert into board 
+				values(null,#{title },#{contents } , now(),0,#{group_no },#{order_no },#{depth } ,#{user_no })
+			]]>
+			</otherwise>
+		</choose>
+	</insert>
+	<update id="updateOrderNo" parameterType="boardvo">
+		<![CDATA[
+			update board 
+				set order_no = (order_no+1) 
+				where group_no=#{group_no } and order_no>=#{order_no }
+		]]>
+	</update>
+	
+	<delete id="delete" parameterType="boardvo">
+		<![CDATA[
+			delete from board where no=#{no }
+		]]>
+	</delete>
+	
+	<update id="updateHit" parameterType="boardvo">
+		<![CDATA[
+			update board set hit = (hit+1) where group_no= #{group_no } and order_no= #{order_no }
+		]]>
+	</update>
+	
+	<select id="boardSelect" parameterType="boardvo" resultType="boardvo">
+		<![CDATA[
+			select no, title, contents, user_no, depth, group_no, order_no from board where group_no= #{group_no } and order_no= #{order_no }
+		]]>
+	</select>
+	
+	<select id="getListComment" parameterType="boardvo" resultType="commentvo">
+		<![CDATA[
+			select a.user_no, c.name as user_name, a.comment, a.no 
+				from comment a, board b, user c
+				where a.board_no=b.no and a.user_no=c.no 
+				and b.group_no = #{group_no } and b.order_no = #{order_no } 
+				order by a.no asc
+		]]>
+	</select>
+	
+	<select id="getNo" parameterType="commentvo" resultType="long">
+		<![CDATA[
+			select no from board 
+				where order_no=#{order_no } and group_no=#{group_no }
+		]]>
+	</select>
+	
+	<insert id="insertComment" parameterType="commentvo">
+		<![CDATA[
+			insert into comment values(null, #{user_no }, #{comment }, #{board_no })	
+		]]>
+	</insert>
+	
+	<delete id="deleteComment" parameterType="commentvo">
+		<![CDATA[
+			delete from comment where no=#{no }
+		]]>
+	</delete>
+	
+	<update id="update" parameterType="boardvo">
+		<![CDATA[
+			update board set title=#{title }, contents=#{contents } where no=#{no }
+		]]>
+	</update>
+
+</mapper>

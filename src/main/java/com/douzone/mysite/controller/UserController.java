@@ -74,7 +74,12 @@ public class UserController {
 	}
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
 	public String modify(HttpSession session, @ModelAttribute UserVo userVo) {
-		session.setAttribute("authuser",userService.modify(userVo));
+		userService.modify(userVo);
+		UserVo authuser = (UserVo)session.getAttribute("authuser");
+		if(session != null && authuser != null) {
+			session.removeAttribute("authuser");
+			session.invalidate();
+		}
 		return "redirect:/";
 	}
 

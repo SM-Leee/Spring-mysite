@@ -20,125 +20,106 @@ import com.douzone.mysite.vo.UserVo;
 @Controller
 @RequestMapping("/board")
 public class BoardController {
-	
+
 	@Autowired
 	private BoardService boardService;
-	
-	@RequestMapping(value="/list", method=RequestMethod.GET)
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(
-			@RequestParam(value="page", required=false, defaultValue="0") int page,
+			@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+			@RequestParam(value = "kwd", required = false, defaultValue = "") String kwd,
 			Model model) {
-		
-		Map<String, Object> map = boardService.list(page);
+		Map<String, Object> map = boardService.list(page, kwd);
 		model.addAllAttributes(map);
-		
+
 		return "board/list";
-		
+
 	}
-	@RequestMapping(value="/searchlist", method=RequestMethod.GET)
-	public String searchlist(
-			@RequestParam(value="page", required=false, defaultValue="0") int page,
-			@RequestParam(value="kwd", required=false, defaultValue="") String kwd,
-			Model model) {
-		
-		Map<String,Object> map = boardService.list(page, kwd);
-		model.addAllAttributes(map);
-		
-		return "/board/list";
-	}
-	
 	@RequestMapping(value="/list", method=RequestMethod.POST)
-	public String list(
+	public String searchList(
 			@RequestParam(value="page", required=false, defaultValue="0") int page,
 			@RequestParam(value="kwd", required=false, defaultValue="") String kwd,
-			Model model) {
-		//boardService.list(page, kwd);
+			Model model) { 
 		Map<String,Object> map = boardService.list(page, kwd);
 		model.addAllAttributes(map);
-		//model.addAttribute("kwd", kwd);
 		
 		return "/board/list";
 	}
-	
-	@RequestMapping(value="/write", method=RequestMethod.GET)
+
+	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public String write(HttpSession session) {
-		UserVo userVo = (UserVo)session.getAttribute("authuser");
-		if(userVo == null) {
+		UserVo userVo = (UserVo) session.getAttribute("authuser");
+		if (userVo == null) {
 			return "redirect:/";
 		}
 		return "board/write";
 	}
-	
-	@RequestMapping(value="/write", method=RequestMethod.POST)
-	public String write(@ModelAttribute BoardVo boardVo) {
+
+	@RequestMapping(value = "/write", method = RequestMethod.POST)
+	public String write( @ModelAttribute BoardVo boardVo) {
 		boardService.write(boardVo);
 		return "redirect:/board/list";
 	}
-	
-	@RequestMapping(value="/delete", method=RequestMethod.GET)
+
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String delete(@ModelAttribute BoardVo boardVo) {
 		boardService.delete(boardVo);
 		return "redirect:/board/list";
 	}
-	
-	@RequestMapping(value="/view", method=RequestMethod.GET)
-	public String view(
-			@ModelAttribute BoardVo boardVo,
-			Model model) {
+
+	@RequestMapping(value = "/view", method = RequestMethod.GET)
+	public String view(@ModelAttribute BoardVo boardVo, Model model) {
 		model.addAllAttributes(boardService.view(boardVo));
+		System.out.println(boardVo);
 		return "board/view";
 	}
-	
-	@RequestMapping(value="/reply", method=RequestMethod.GET)
-	public String reply(HttpSession session,@ModelAttribute BoardVo boardVo) {
-		UserVo authuser = (UserVo)session.getAttribute("authuser");
-		if(authuser == null) {
+
+	@RequestMapping(value = "/reply", method = RequestMethod.GET)
+	public String reply(HttpSession session, @ModelAttribute BoardVo boardVo) {
+		UserVo authuser = (UserVo) session.getAttribute("authuser");
+		if (authuser == null) {
 			return "redirect:/";
 		}
 		return "board/reply";
 	}
-	
-	@RequestMapping(value="/reply", method=RequestMethod.POST)
+
+	@RequestMapping(value = "/reply", method = RequestMethod.POST)
 	public String reply(@ModelAttribute BoardVo boardVo) {
-		
+
 		boardService.reply(boardVo);
 		return "redirect:/board/list";
 	}
-	
-	@RequestMapping(value="/modify", method=RequestMethod.GET)
-	public String modify(HttpSession session,@ModelAttribute BoardVo boardVo) {
-		UserVo authuser = (UserVo)session.getAttribute("authuser");
-		if(authuser == null) {
+
+	@RequestMapping(value = "/modify", method = RequestMethod.GET)
+	public String modify(HttpSession session, @ModelAttribute BoardVo boardVo) {
+		UserVo authuser = (UserVo) session.getAttribute("authuser");
+		if (authuser == null) {
 			return "redirect:/";
 		}
 		return "board/modify";
 	}
-	
-	@RequestMapping(value="/modify", method=RequestMethod.POST)
+
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String modify(@ModelAttribute BoardVo boardVo) {
 		boardService.modify(boardVo);
 		return "redirect:/board/list";
 	}
-	
-	@RequestMapping(value="/writeComment", method=RequestMethod.POST)
-	public String writeComment(
-			@ModelAttribute CommentVo commentVo,
-			Model model) {
+
+	@RequestMapping(value = "/writeComment", method = RequestMethod.POST)
+	public String writeComment(@ModelAttribute CommentVo commentVo, Model model) {
 		boardService.writeComment(commentVo);
 		model.addAttribute("order_no", commentVo.getOrder_no());
 		model.addAttribute("group_no", commentVo.getGroup_no());
-		
+
 		return "redirect:/board/view";
 	}
 
-	@RequestMapping(value="/deleteComment", method=RequestMethod.GET)
-	public String deleteComment(
-			@ModelAttribute CommentVo commentVo
-			,Model model) {
+	@RequestMapping(value = "/deleteComment", method = RequestMethod.GET)
+	public String deleteComment(@ModelAttribute CommentVo commentVo, Model model) {
 		boardService.deleteComment(commentVo);
 		model.addAttribute("order_no", commentVo.getOrder_no());
 		model.addAttribute("group_no", commentVo.getGroup_no());
-		
+
 		return "redirect:/board/view";
 	}
 }
