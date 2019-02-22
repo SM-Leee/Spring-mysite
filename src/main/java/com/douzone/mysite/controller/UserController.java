@@ -1,6 +1,5 @@
 package com.douzone.mysite.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,15 +39,14 @@ public class UserController {
 	}
 
 	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String login(HttpServletRequest request, HttpSession session, @ModelAttribute UserVo userVo) {
+	public String login(HttpSession session, @ModelAttribute UserVo userVo) {
 		UserVo authuser = userService.login(userVo.getEmail(), userVo.getPassword());
 		if(authuser == null) {
 			/* 인증실패 */
-			request.setAttribute("result", "fail");
+			session.setAttribute("result", "fail");
 			return "user/loginform";
 		}
 
-		session = request.getSession(true);
 		session.setAttribute("authuser", authuser);
 		return "redirect:/";
 	}
@@ -65,6 +63,7 @@ public class UserController {
 
 	@RequestMapping(value="/modify", method=RequestMethod.GET)
 	public String modify(HttpSession session, Model model) {
+		/* 접근제어 */
 		UserVo authuser = (UserVo) session.getAttribute("authuser");
 		if(authuser == null) {
 			return "redirect:/";
@@ -74,12 +73,16 @@ public class UserController {
 	}
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
 	public String modify(HttpSession session, @ModelAttribute UserVo userVo) {
-		userService.modify(userVo);
 		UserVo authuser = (UserVo)session.getAttribute("authuser");
-		if(session != null && authuser != null) {
+		if(authuser == null) {
 			session.removeAttribute("authuser");
 			session.invalidate();
+			return "redirect:/";
 		}
+		
+		userVo.setNo(authuser.getNo());
+		userService.modify(userVo);
+		
 		return "redirect:/";
 	}
 

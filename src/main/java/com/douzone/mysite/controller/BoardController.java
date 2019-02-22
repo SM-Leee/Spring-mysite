@@ -25,10 +25,14 @@ public class BoardController {
 	private BoardService boardService;
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String list(
+	public String list(HttpSession session,
 			@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 			@RequestParam(value = "kwd", required = false, defaultValue = "") String kwd,
 			Model model) {
+		UserVo authuser = (UserVo) session.getAttribute("authuser");
+		if (authuser == null) {
+			return "redirect:/";
+		}
 		Map<String, Object> map = boardService.list(page, kwd);
 		model.addAllAttributes(map);
 
@@ -56,13 +60,21 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write( @ModelAttribute BoardVo boardVo) {
+	public String write(HttpSession session, @ModelAttribute BoardVo boardVo) {
+		UserVo userVo = (UserVo) session.getAttribute("authuser");
+		if (userVo == null) {
+			return "redirect:/";
+		}
 		boardService.write(boardVo);
 		return "redirect:/board/list";
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public String delete(@ModelAttribute BoardVo boardVo) {
+	public String delete(HttpSession session,@ModelAttribute BoardVo boardVo) {
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(null == authUser) {
+			return "redirect:/";
+		}
 		boardService.delete(boardVo);
 		return "redirect:/board/list";
 	}
@@ -70,7 +82,6 @@ public class BoardController {
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public String view(@ModelAttribute BoardVo boardVo, Model model) {
 		model.addAllAttributes(boardService.view(boardVo));
-		System.out.println(boardVo);
 		return "board/view";
 	}
 

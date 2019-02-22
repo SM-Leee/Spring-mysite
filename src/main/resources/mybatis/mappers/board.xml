@@ -39,7 +39,7 @@
 	
 	<insert id="insert" parameterType="boardvo">
 		<choose>
-			<when test="group_no == 0">
+			<when test="group_no==0">
 			<![CDATA[
 			insert into board 
 				values(null,#{title },#{contents }, now(),0,#{max_no },1,0,#{user_no })

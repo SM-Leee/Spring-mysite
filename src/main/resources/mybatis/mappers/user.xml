@@ -4,13 +4,13 @@
 <mapper namespace="user">
 	<insert id="insert" parameterType="uservo">
 		<![CDATA[
-			insert into user values(null, #{name },#{email },#{password },#{gender },now())
+			insert into user values(null, #{name },#{email },password(#{password }),#{gender },now(),'USER')
 		]]>
 	</insert>
 	<!-- map과 string, int, long 등 은 parameter에 내장되어있다. -->
 	<select id="getByEmailAndPassword" parameterType="map" resultType="uservo">
 		<![CDATA[
-			select no, name from user where email=#{email} and password=#{password}
+			select no, name from user where email=#{email} and password=password(#{password})
 		]]>
 	</select>
 	
@@ -22,13 +22,22 @@
 	
 	<select id="getByNo" parameterType="long" resultType="uservo">
 		<![CDATA[
-			select name, email, gender from user where no= #{no }
+			select no ,name, email, gender from user where no= #{no }
 		]]>
 	</select>
 	
 	<update id="update" parameterType="uservo">
 		<![CDATA[
-			update user set name=#{name }, gender=#{gender } where no= #{no }
+			update user set name=#{name }, 
+		]]>
+		<if test="password != ''">
+			<![CDATA[   
+		       password=password(#{password }),
+			]]> 
+		</if>
+		
+		<![CDATA[
+		gender=#{gender } where no= #{no }
 		]]>
 	</update>
 	

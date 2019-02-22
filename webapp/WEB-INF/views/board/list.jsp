@@ -55,8 +55,7 @@
 				</table>
 				
 				<!-- pager 추가 -->
-				<c:if test="${kwd == null }">
-				
+								
 				<div class="pager">
 					<ul>
 					<c:choose>
@@ -90,44 +89,6 @@
 					</c:choose>
 					</ul>
 				</div>
-				</c:if>
-				<c:if test="${kwd != null }">
-					<div class="pager">
-					<ul>
-					<c:choose>
-						<c:when test="${start_page==1 }">
-							<li>◀</li>
-						</c:when>
-						<c:when test="${start_page!=1 }">
-							<li><a href="${pageContext.servletContext.contextPath }/board/list?page=${start_page-size_page }&kwd=${kwd }">◀</a></li>
-						</c:when>								
-					</c:choose>
-					<c:forEach var="i" begin="${start_page }" end="${end_page }" step="1">
-						<c:choose>
-							<c:when test="${page == i }">
-							<li class="selected"><a href="${pageContext.servletContext.contextPath }/board/list?page=${i }&kwd=${kwd }">${i }</a></li>
-							</c:when>
-							<c:when test="${(page != i) and (total_page>=i) }">
-								<li><a href="${pageContext.servletContext.contextPath }/board/list?page=${i }&kwd=${kwd }">${i }</a></li>
-							</c:when>
-							<c:otherwise>
-								<li>${i }</li>
-							</c:otherwise>
-						</c:choose>
-						</c:forEach>
-						<c:choose>
-						<c:when test="${end_page<total_page && size_page<total_page }">
-							<li><a href="${pageContext.servletContext.contextPath }/board/list?page=${start_page+size_page }&kwd=${kwd }">▶</a></li>
-						</c:when>	
-						<c:otherwise>
-							<li>▶</li>
-						</c:otherwise>							
-					</c:choose>
-					</ul>
-				</div>
-				</c:if>
-				<!-- pager 추가 -->
-				
 				
 				<c:if test="${authuser != null }">
 					<div class="bottom">
