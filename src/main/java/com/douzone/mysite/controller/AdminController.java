@@ -12,32 +12,33 @@ import com.douzone.security.Auth;
 import com.douzone.security.Auth.Role;
 
 @Controller
-@Auth(Role.ADMIN)
 @RequestMapping("/admin")
 public class AdminController {
 	
 	@Autowired
 	private SiteService siteService;
-	
+	@Auth(Role.ADMIN)
 	@RequestMapping({"" ,"/main"})
 	public String main(Model model) {
 		model.addAttribute("siteVo", siteService.get());
 		return "admin/main";
 	}
-	
+	@Auth(Role.ADMIN)
 	@RequestMapping("/board")
 	public String board() {
 		return "admin/board";
 	}
+	@Auth(Role.ADMIN)
 	@RequestMapping("/guestbook")
 	public String guestbook() {
 		return "admin/guestbook";
 	}
+	@Auth(Role.ADMIN)
 	@RequestMapping("/user")
 	public String user() {
 		return "admin/user";
 	}
-	
+	@Auth(Role.ADMIN)
 	@RequestMapping("/main/update")
 	public String update(@ModelAttribute SiteVo siteVo) {
 		siteService.update(siteVo);
