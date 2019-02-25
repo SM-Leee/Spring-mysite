@@ -31,7 +31,7 @@
 		
 		<!-- TitleInterceptor -->
 		<mvc:interceptor>
-			<mvc:mapping path="/**" />
+			<mvc:mapping path="/" />
 			<bean class="com.douzone.security.TitleInterceptor" />
 		</mvc:interceptor> 
 		<!-- AuthLoginInterceptor -->
@@ -50,6 +50,7 @@
 			<mvc:exclude-mapping path="/user/auth"/>
 			<mvc:exclude-mapping path="/user/logout"/>
 			<mvc:exclude-mapping path="/assets/**"/>
+			<mvc:exclude-mapping path="/"/>
 			<bean class="com.douzone.security.AuthInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>

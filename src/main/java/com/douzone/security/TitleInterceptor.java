@@ -35,10 +35,10 @@ public class TitleInterceptor extends HandlerInterceptorAdapter {
 		System.out.println(m);
 		SiteVo siteVo = (SiteVo)m.get("siteVo");
 		System.out.println(siteVo);
-		if(sc == null) {
+		if(siteVo != null) {
 			//modelAndView.addObject("siteVo", vo);
 			
-			m.addAttribute("siteVo", siteVo);
+			sc.setAttribute("siteVo", siteVo);
 			System.out.println(m);
 		}
 	}
