@@ -10,7 +10,7 @@
 	<!-- map과 string, int, long 등 은 parameter에 내장되어있다. -->
 	<select id="getByEmailAndPassword" parameterType="map" resultType="uservo">
 		<![CDATA[
-			select no, name from user where email=#{email} and password=password(#{password})
+			select no, name, role from user where email=#{email} and password=password(#{password})
 		]]>
 	</select>
 	

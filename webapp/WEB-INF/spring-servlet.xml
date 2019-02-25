@@ -11,7 +11,12 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- validator, conversionService, messageConverter 를 자동으로 등록 -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven>
+		<!-- Controller의 Handler의 Argument Resolver 등록 -->
+		<mvc:argument-resolvers>
+		<bean class = "com.douzone.security.AuthUserHandlerMethodArgumentResolver"/>
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
 
 	<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
 	<mvc:default-servlet-handler />
@@ -24,10 +29,28 @@
 			<bean class="com.douzone.mysite.interceptor.MyInterceptor02" />
 		</mvc:interceptor> -->
 		
+		<!-- TitleInterceptor -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.douzone.security.TitleInterceptor" />
+		</mvc:interceptor> 
 		<!-- AuthLoginInterceptor -->
 		<mvc:interceptor>
 			<mvc:mapping path="/user/auth" />
 			<bean class="com.douzone.security.AuthLoginInterceptor" />
+		</mvc:interceptor>
+		<!-- AuthLogoutInterceptor -->
+		<mvc:interceptor>
+			<mvc:mapping path="/user/logout" />
+			<bean class="com.douzone.security.AuthLogoutInterceptor" />
+		</mvc:interceptor>
+		<!-- AuthInterceptor -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/user/auth"/>
+			<mvc:exclude-mapping path="/user/logout"/>
+			<mvc:exclude-mapping path="/assets/**"/>
+			<bean class="com.douzone.security.AuthInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
 

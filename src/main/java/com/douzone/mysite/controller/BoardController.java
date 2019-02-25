@@ -16,6 +16,8 @@ import com.douzone.mysite.service.BoardService;
 import com.douzone.mysite.vo.BoardVo;
 import com.douzone.mysite.vo.CommentVo;
 import com.douzone.mysite.vo.UserVo;
+import com.douzone.security.Auth;
+import com.douzone.security.AuthUser;
 
 @Controller
 @RequestMapping("/board")
@@ -24,21 +26,20 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 
+	@Auth
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String list(HttpSession session,
+	public String list(
 			@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 			@RequestParam(value = "kwd", required = false, defaultValue = "") String kwd,
 			Model model) {
-		UserVo authuser = (UserVo) session.getAttribute("authuser");
-		if (authuser == null) {
-			return "redirect:/";
-		}
+		
 		Map<String, Object> map = boardService.list(page, kwd);
 		model.addAllAttributes(map);
 
 		return "board/list";
 
 	}
+	@Auth
 	@RequestMapping(value="/list", method=RequestMethod.POST)
 	public String searchList(
 			@RequestParam(value="page", required=false, defaultValue="0") int page,
@@ -49,32 +50,23 @@ public class BoardController {
 		
 		return "/board/list";
 	}
-
+	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
-	public String write(HttpSession session) {
-		UserVo userVo = (UserVo) session.getAttribute("authuser");
-		if (userVo == null) {
-			return "redirect:/";
-		}
+	public String write() {
 		return "board/write";
 	}
 
+	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write(HttpSession session, @ModelAttribute BoardVo boardVo) {
-		UserVo userVo = (UserVo) session.getAttribute("authuser");
-		if (userVo == null) {
-			return "redirect:/";
-		}
+	public String write(@ModelAttribute BoardVo boardVo) {
+		
 		boardService.write(boardVo);
 		return "redirect:/board/list";
 	}
-
+	
+	@Auth
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public String delete(HttpSession session,@ModelAttribute BoardVo boardVo) {
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(null == authUser) {
-			return "redirect:/";
-		}
+	public String delete(@ModelAttribute BoardVo boardVo) {
 		boardService.delete(boardVo);
 		return "redirect:/board/list";
 	}
@@ -84,13 +76,10 @@ public class BoardController {
 		model.addAllAttributes(boardService.view(boardVo));
 		return "board/view";
 	}
-
+	
+	@Auth
 	@RequestMapping(value = "/reply", method = RequestMethod.GET)
 	public String reply(HttpSession session, @ModelAttribute BoardVo boardVo) {
-		UserVo authuser = (UserVo) session.getAttribute("authuser");
-		if (authuser == null) {
-			return "redirect:/";
-		}
 		return "board/reply";
 	}
 
@@ -100,13 +89,9 @@ public class BoardController {
 		boardService.reply(boardVo);
 		return "redirect:/board/list";
 	}
-
+	@Auth
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
-	public String modify(HttpSession session, @ModelAttribute BoardVo boardVo) {
-		UserVo authuser = (UserVo) session.getAttribute("authuser");
-		if (authuser == null) {
-			return "redirect:/";
-		}
+	public String modify() {
 		return "board/modify";
 	}
 
@@ -115,7 +100,8 @@ public class BoardController {
 		boardService.modify(boardVo);
 		return "redirect:/board/list";
 	}
-
+	
+	@Auth
 	@RequestMapping(value = "/writeComment", method = RequestMethod.POST)
 	public String writeComment(@ModelAttribute CommentVo commentVo, Model model) {
 		boardService.writeComment(commentVo);
@@ -124,7 +110,7 @@ public class BoardController {
 
 		return "redirect:/board/view";
 	}
-
+	@Auth
 	@RequestMapping(value = "/deleteComment", method = RequestMethod.GET)
 	public String deleteComment(@ModelAttribute CommentVo commentVo, Model model) {
 		boardService.deleteComment(commentVo);

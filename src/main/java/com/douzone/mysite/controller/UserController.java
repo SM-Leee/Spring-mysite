@@ -1,7 +1,5 @@
 package com.douzone.mysite.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.douzone.mysite.service.UserService;
 import com.douzone.mysite.vo.UserVo;
+import com.douzone.security.Auth;
+import com.douzone.security.Auth.Role;
+import com.douzone.security.AuthUser;
 
 @Controller
 @RequestMapping("/user")
@@ -38,39 +39,22 @@ public class UserController {
 		return "user/login";
 	}
 
-	@RequestMapping(value="/logout", method=RequestMethod.GET)
-	public String logout(HttpSession session) {
-		UserVo authuser = (UserVo)session.getAttribute("authuser");
-		if(session != null && authuser != null) {
-			session.removeAttribute("authuser");
-			session.invalidate();
-		}
-		return "redirect:/";
-	}
-
+	@Auth
 	@RequestMapping(value="/modify", method=RequestMethod.GET)
-	public String modify(HttpSession session, Model model) {
-		/* 접근제어 */
-		UserVo authuser = (UserVo) session.getAttribute("authuser");
-		if(authuser == null) {
-			return "redirect:/";
-		}
-		model.addAttribute("vo", userService.modifyselect(authuser));
-		return "user/modifyform";
-	}
-	@RequestMapping(value="/modify", method=RequestMethod.POST)
-	public String modify(HttpSession session, @ModelAttribute UserVo userVo) {
-		UserVo authuser = (UserVo)session.getAttribute("authuser");
-		if(authuser == null) {
-			session.removeAttribute("authuser");
-			session.invalidate();
-			return "redirect:/";
-		}
+	public String modify(@AuthUser UserVo authuser, Model model) {
 		
+		model.addAttribute("vo", userService.modifyselect(authuser));
+		return "user/modify";
+	}
+	@Auth
+	@RequestMapping(value="/modify", method=RequestMethod.POST)
+	public String modify(@AuthUser UserVo authuser ,@ModelAttribute UserVo userVo) {
 		userVo.setNo(authuser.getNo());
 		userService.modify(userVo);
 		
-		return "redirect:/";
+		authuser.setName(userVo.getName());
+		
+		return "redirect:/main?result=success";
 	}
 
 	//	@ExceptionHandler(UserDaoException.class)
