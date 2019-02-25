@@ -20,13 +20,14 @@ import com.douzone.security.Auth;
 import com.douzone.security.AuthUser;
 
 @Controller
+@Auth
 @RequestMapping("/board")
 public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
 
-	@Auth
+	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(
 			@RequestParam(value = "page", required = false, defaultValue = "0") int page,
@@ -39,7 +40,7 @@ public class BoardController {
 		return "board/list";
 
 	}
-	@Auth
+	
 	@RequestMapping(value="/list", method=RequestMethod.POST)
 	public String searchList(
 			@RequestParam(value="page", required=false, defaultValue="0") int page,
@@ -56,7 +57,7 @@ public class BoardController {
 		return "board/write";
 	}
 
-	@Auth
+	
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public String write(@ModelAttribute BoardVo boardVo) {
 		
@@ -77,7 +78,7 @@ public class BoardController {
 		return "board/view";
 	}
 	
-	@Auth
+	
 	@RequestMapping(value = "/reply", method = RequestMethod.GET)
 	public String reply(HttpSession session, @ModelAttribute BoardVo boardVo) {
 		return "board/reply";
@@ -110,7 +111,7 @@ public class BoardController {
 
 		return "redirect:/board/view";
 	}
-	@Auth
+	
 	@RequestMapping(value = "/deleteComment", method = RequestMethod.GET)
 	public String deleteComment(@ModelAttribute CommentVo commentVo, Model model) {
 		boardService.deleteComment(commentVo);

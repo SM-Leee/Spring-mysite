@@ -32,14 +32,13 @@ public class TitleInterceptor extends HandlerInterceptorAdapter {
 		ServletContext sc = request.getServletContext();
 		
 		ModelMap m = modelAndView.getModelMap();
-		System.out.println(m);
+		
 		SiteVo siteVo = (SiteVo)m.get("siteVo");
-		System.out.println(siteVo);
+		
 		if(siteVo != null) {
-			//modelAndView.addObject("siteVo", vo);
-			
+					
 			sc.setAttribute("siteVo", siteVo);
-			System.out.println(m);
+		
 		}
 	}
 	
