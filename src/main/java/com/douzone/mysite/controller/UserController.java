@@ -35,20 +35,7 @@ public class UserController {
 
 	@RequestMapping(value="/login", method=RequestMethod.GET)
 	public String login() {
-		return "user/loginform";
-	}
-
-	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String login(HttpSession session, @ModelAttribute UserVo userVo) {
-		UserVo authuser = userService.login(userVo.getEmail(), userVo.getPassword());
-		if(authuser == null) {
-			/* 인증실패 */
-			session.setAttribute("result", "fail");
-			return "user/loginform";
-		}
-
-		session.setAttribute("authuser", authuser);
-		return "redirect:/";
+		return "user/login";
 	}
 
 	@RequestMapping(value="/logout", method=RequestMethod.GET)
