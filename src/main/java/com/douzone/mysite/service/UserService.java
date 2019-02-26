@@ -33,5 +33,10 @@ public class UserService {
 	public void modify(UserVo userVo) {
 		userDao.update(userVo);
 	}
+	
+	public boolean existEmail(String email) {
+		UserVo userVo = userDao.get(email);
+		return userVo != null;
+	}
 
 }

@@ -40,14 +40,14 @@
 									<img
 										src="${pageContext.servletContext.contextPath }/assets/images/reply.png">
 								</c:if> <a
-								href="${pageContext.servletContext.contextPath }/board/view?group_no=${vo.group_no}&order_no=${vo.order_no}">${vo.title }</a></td>
+								href="${pageContext.servletContext.contextPath }/board/view/${vo.no }?page=${page }&kwd=${kwd}">${vo.title }</a></td>
 
 							<td>${vo.user_name }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.write_date }</td>
 							<td><c:if test="${authuser.no == vo.user_no}">
 									<a
-										href="${pageContext.servletContext.contextPath }/board/delete?no=${vo.no }"
+										href="${pageContext.servletContext.contextPath }/board/delete?no=${vo.no }?page=${page }&kwd=${kwd}"
 										class="del"> 삭제 </a>
 								</c:if></td>
 						</tr>
@@ -93,7 +93,7 @@
 				<c:if test="${authuser != null }">
 					<div class="bottom">
 						<a
-							href="${pageContext.servletContext.contextPath }/board/write"
+							href="${pageContext.servletContext.contextPath }/board/write?page=${page }&kwd=${kwd}"
 							id="new-book">글쓰기</a>
 					</div>
 				</c:if>

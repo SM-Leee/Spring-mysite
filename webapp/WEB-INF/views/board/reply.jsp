@@ -17,18 +17,18 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="${pageContext.servletContext.contextPath }/board/reply">
-					<input type="hidden" name="user_no" value="${param.user_no }">
-					<input type="hidden" name="group_no" value="${param.group_no }">
-					<input type="hidden" name="order_no" value="${param.order_no }">
-					<input type="hidden" name="depth" value="${param.depth }">
+				<form class="board-form" method="post" action="${pageContext.servletContext.contextPath }/board/reply?page=${page}&kwd=${kwd}">
+					<input type="hidden" name="user_no" value="${vo.user_no }">
+					<input type="hidden" name="group_no" value="${vo.group_no }">
+					<input type="hidden" name="order_no" value="${vo.order_no }">
+					<input type="hidden" name="depth" value="${vo.depth }">
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글쓰기</th>
 						</tr>
 						<tr>
 							<td class="label">제목</td>
-							<td><input type="text" name="title" value="${param.title }"></td>
+							<td><input type="text" name="title" value="${vo.title }"></td>
 						</tr>
 						<tr>
 							<td class="label">내용</td>
@@ -36,7 +36,7 @@
 						</tr>
 					</table>
 					<div class="bottom">
-						<a href="${pageContext.servletContext.contextPath }/board/view?order_no=${param.order_no}&group_no=${param.group_no}">취소</a> <input type="submit" value="등록">
+						<a href="${pageContext.servletContext.contextPath }/board/view/${vo.no }?page=${page}&kwd=${kwd}">취소</a> <input type="submit" value="등록">
 					</div>
 				</form>
 			</div>

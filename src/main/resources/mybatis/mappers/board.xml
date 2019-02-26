@@ -75,7 +75,7 @@
 	
 	<select id="boardSelect" parameterType="boardvo" resultType="boardvo">
 		<![CDATA[
-			select no, title, contents, user_no, depth, group_no, order_no from board where group_no= #{group_no } and order_no= #{order_no }
+			select no, title, contents, user_no, depth, group_no, order_no from board where no=#{no }
 		]]>
 	</select>
 	
@@ -84,15 +84,8 @@
 			select a.user_no, c.name as user_name, a.comment, a.no 
 				from comment a, board b, user c
 				where a.board_no=b.no and a.user_no=c.no 
-				and b.group_no = #{group_no } and b.order_no = #{order_no } 
+				and b.no= #{no } 
 				order by a.no asc
-		]]>
-	</select>
-	
-	<select id="getNo" parameterType="commentvo" resultType="long">
-		<![CDATA[
-			select no from board 
-				where order_no=#{order_no } and group_no=#{group_no }
 		]]>
 	</select>
 	
@@ -113,5 +106,10 @@
 			update board set title=#{title }, contents=#{contents } where no=#{no }
 		]]>
 	</update>
+	<select id="selectAll" parameterType="boardvo" resultType="boardvo">
+		<![CDATA[
+			select * from board where no=#{no }
+		]]>
+	</select>
 
 </mapper>

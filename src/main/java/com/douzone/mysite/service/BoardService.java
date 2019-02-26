@@ -83,12 +83,15 @@ public class BoardService {
 		boardDao.insert(boardVo);
 	}
 
-	public void modify(BoardVo boardVo) {		
+	public BoardVo getAll(BoardVo boardVo) {
+		return boardDao.getAll(boardVo);
+	}
+	
+	public void modify(BoardVo boardVo) {
 		boardDao.update(boardVo);
 	}
 
 	public void writeComment(CommentVo commentVo) {
-		commentVo.setBoard_no(boardDao.getNo(commentVo));
 		boardDao.insert(commentVo);
 	}
 

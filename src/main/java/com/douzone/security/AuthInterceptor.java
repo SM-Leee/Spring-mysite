@@ -28,11 +28,11 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		Auth auth = handlerMethod.getMethodAnnotation(Auth.class);
 		
 		// 3-1. Method 에 @Auth가 안붙어 있으면 class(type)의 @Auth 받아오기
-		//if(auth == null) {
-		//	auth = handlerMethod.getMethod().getDeclaringClass().getAnnotation(Auth.class);
-		//}
+		if(auth == null) {
+			auth = handlerMethod.getMethod().getDeclaringClass().getAnnotation(Auth.class);
+		}
 		
-		// 4. Method 에 @Auth가 안붙어 있으면 
+		// 4. Method와 class 에 @Auth가 안붙어 있으면 
 		if(auth == null) {
 			return true;
 		}
@@ -51,17 +51,34 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		
 		//5-1. role 비교작업 
 		Role role = auth.value();
-		if(authuser.getRole().equals(role.toString())) {
-			//접근허용
+		
+		
+		// User Role 접근이면 인증만 되어 있으면 허용
+		if(role == Role.USER) {
 			return true;
-		} else {
-			//접근거절
+		}
+		
+		
+		// ADMIN Role 접근
+		//ADMIN 권한이 없는 사욪자이면 메인으로 갑니다
+		if("ADMIN".equals(authuser.getRole()) == false) {
 			response.sendRedirect(request.getContextPath()+"/");
 			return false;
 		}
 		
-		// 6. 접근허용
-		//return true;
+		
+		// admin 접근 허용
+		return true;
+		
+		
+//		if(authuser.getRole().equals(role.toString())) {
+//			//접근허용
+//			return true;
+//		} else {
+//			//접근거절
+//			response.sendRedirect(request.getContextPath()+"/");
+//			return false;
+//		}
 		
 	}
 

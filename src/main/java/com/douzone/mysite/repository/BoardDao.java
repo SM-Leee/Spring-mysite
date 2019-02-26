@@ -40,10 +40,6 @@ public class BoardDao {
 		return sqlSession.insert("board.insert", boardVo);
 	}
 	
-	public Long getNo(CommentVo commentVo) {
-		return sqlSession.selectOne("board.getNo", commentVo);
-	}
-	
 	public int insert(CommentVo commentVo) {
 		return sqlSession.insert("board.insertComment", commentVo);
 	}
@@ -52,6 +48,11 @@ public class BoardDao {
 	}
 	public BoardVo get(BoardVo boardVo) {
 		boardVo = sqlSession.selectOne("board.boardSelect", boardVo);
+		return boardVo;
+	}
+	
+	public BoardVo getAll(BoardVo boardVo) {
+		boardVo = sqlSession.selectOne("board.selectAll", boardVo);
 		return boardVo;
 	}
 	

@@ -17,6 +17,7 @@ public class UserDao {
 	
 	public UserVo get(String email){
 		return sqlSession.selectOne("user.getByEmail", email);
+		
 	}
 	
 	public int update(UserVo userVo){
@@ -34,6 +35,7 @@ public class UserDao {
 		map.put("password", password);
 		
 		UserVo userVo = sqlSession.selectOne("user.getByEmailAndPassword", map);
+		
 		return userVo;
 	}
 	

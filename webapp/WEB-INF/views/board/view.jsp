@@ -37,14 +37,14 @@
 					</tr>
 				</table>
 				<div class="bottom">
-					<a href="${pageContext.servletContext.contextPath }/board/list">글목록</a>
+					<a href="${pageContext.servletContext.contextPath }/board/list?page=${page}&kwd=${kwd}">글목록</a>
 					<c:if test="${authuser != null && vo.user_no != authuser.no }">
 						<a
-							href="${pageContext.servletContext.contextPath }/board/reply?group_no=${vo.group_no }&order_no=${vo.order_no }&depth=${vo.depth }&title=${vo.title}&user_no=${authuser.no}">답글달기</a>
+							href="${pageContext.servletContext.contextPath }/board/reply/${vo.no }?page=${page}&kwd=${kwd}">답글달기</a>
 					</c:if>
 					<c:if test="${authuser.no == vo.user_no }">
 						<a
-							href="${pageContext.servletContext.contextPath }/board/modify?title=${vo.title }&contents=${vo.contents }&no=${vo.no }">글수정</a>
+							href="${pageContext.servletContext.contextPath }/board/modify/${vo.no }?page=${page}&kwd=${kwd}">글수정</a>
 					</c:if>
 				</div>
 
@@ -55,16 +55,15 @@
 							<td>${cl.comment }</td>
 							<td><c:if test="${cl.user_no == authuser.no }">
 									<a
-										href="${pageContext.servletContext.contextPath }/board/deleteComment?no=${cl.no }&group_no=${param.group_no }&order_no=${param.order_no }"
+										href="${pageContext.servletContext.contextPath }/board/deleteComment?no=${cl.no }&board_no=${vo.no }&page=${page}&kwd=${kwd}"
 										class="del"> 삭제 </a>
 								</c:if></td>
 						</tr>
 					</c:forEach>
 				</table>
 				<c:if test="${authuser != null }">
-				<form class="board-form" method="post" action="${pageContext.servletContext.contextPath }/board/writeComment?user_no=${authuser.no }">
-					<input type="hidden" name="group_no" value="${param.group_no }">
-					<input type="hidden" name="order_no" value="${param.order_no }">
+				<form class="board-form" method="post" action="${pageContext.servletContext.contextPath }/board/writeComment?user_no=${authuser.no }&page=${page}&kwd=${kwd}">
+					<input type="hidden" name="board_no" value="${vo.no }">
 					<table class="tbl-ex">
 						<tr>
 							<td class="label">댓글</td>

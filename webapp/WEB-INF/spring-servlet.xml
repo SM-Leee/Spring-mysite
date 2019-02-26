@@ -10,11 +10,37 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
+	<!-- auto proxy -->
+	<aop:aspectj-autoproxy />
+
 	<!-- validator, conversionService, messageConverter 를 자동으로 등록 -->
 	<mvc:annotation-driven>
+
+		<!-- message Converter -->
+		<mvc:message-converters>
+			<bean
+				class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+
+		</mvc:message-converters>
+
 		<!-- Controller의 Handler의 Argument Resolver 등록 -->
 		<mvc:argument-resolvers>
-		<bean class = "com.douzone.security.AuthUserHandlerMethodArgumentResolver"/>
+			<bean
+				class="com.douzone.security.AuthUserHandlerMethodArgumentResolver" />
 		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
 
@@ -24,16 +50,14 @@
 	<!-- Interceptors -->
 	<mvc:interceptors>
 		<!-- MyIntercetor01 -->
-		<!-- <mvc:interceptor>
-			<mvc:mapping path="/guestbook/**" />
-			<bean class="com.douzone.mysite.interceptor.MyInterceptor02" />
-		</mvc:interceptor> -->
-		
+		<!-- <mvc:interceptor> <mvc:mapping path="/guestbook/**" /> <bean class="com.douzone.mysite.interceptor.MyInterceptor02" 
+			/> </mvc:interceptor> -->
+
 		<!-- TitleInterceptor -->
 		<mvc:interceptor>
 			<mvc:mapping path="/" />
 			<bean class="com.douzone.security.TitleInterceptor" />
-		</mvc:interceptor> 
+		</mvc:interceptor>
 		<!-- AuthLoginInterceptor -->
 		<mvc:interceptor>
 			<mvc:mapping path="/user/auth" />
@@ -47,10 +71,10 @@
 		<!-- AuthInterceptor -->
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
-			<mvc:exclude-mapping path="/user/auth"/>
-			<mvc:exclude-mapping path="/user/logout"/>
-			<mvc:exclude-mapping path="/assets/**"/>
-			<mvc:exclude-mapping path="/"/>
+			<mvc:exclude-mapping path="/user/auth" />
+			<mvc:exclude-mapping path="/user/logout" />
+			<mvc:exclude-mapping path="/assets/**" />
+			<mvc:exclude-mapping path="/" />
 			<bean class="com.douzone.security.AuthInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>

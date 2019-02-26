@@ -26,14 +26,12 @@
 				$("#email").focus();
 				return false;
 			}
-			/*
+			
 			//2-2. 이메일 중복체크를 유무
 			if($("#img-checkemail").is(":visible") == false){
 				alert("이메일 중복 체크를 하셔야됩니다.");
 				return false;
 			}
-			*/
-			
 			
 			//3. 비밀번호 비어있는지 확인
 			if($("input[type='password']").val() == ""){
@@ -49,6 +47,7 @@
 			}
 			return true;
 		});
+		
 		$("#email").change(function(){
 			$("#btn-checkemail").show();
 			$("#img-checkemail").hide();
@@ -56,26 +55,33 @@
 		
 		
 		$("#btn-checkemail").click(function(){
+			
 			var email = $("#email").val();
 			if(email == ""){
 				return;
 			}
 			
 			$.ajax({
-				url: "${pageContext.servletContext.contextPath }/api/user",
-				type: "post",
+				url: "${pageContext.servletContext.contextPath }/user/api/ajax-checkemail?email="+email,
+				type: "get",
 				dataType: "json",
-				data: "a=ajax-checkemail&email=" + email,
+				data: "",
 				success : function(response){
-					if(response.exist == true){
+					if(response.result == "fail"){
+						console.error(response.message);
+						return;
+					}
+					if(response.data == true){
 						alert("이미존재하는 이메일 입니다. 다른 이메일을 사용해주세요.");
 						$("#email").val("").focus();
 						return;
+					} else{
+						
+						// 사용가능한 이메일
+						$("#btn-checkemail").hide();
+						$("#img-checkemail").show();
 					}
 					
-					// 사용가능한 이메일
-					$("#btn-checkemail").hide();
-					$("#img-checkemail").show();
 				},
 				error:function(xhr, status, e){
 					console.error(status+":"+e);
