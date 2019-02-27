@@ -22,7 +22,7 @@
 			<div id="content">
 				<div id="site-introduction">
 					<img id="profile"
-						src="${pageContext.servletContext.contextPath}/assets/images/head.png"
+						src="${pageContext.servletContext.contextPath}${siteVo.profile}"
 						style="width: 180px">
 					<h2>
 						${siteVo.welcome }

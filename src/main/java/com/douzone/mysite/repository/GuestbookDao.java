@@ -14,7 +14,7 @@ public class GuestbookDao {
 	private SqlSession sqlSession;
 
 	public GuestbookVo get(long no) {
-		return null;
+		return sqlSession.selectOne("guestbook.getNo",no);
 	}
 
 	public List<GuestbookVo> getList(int page) {
@@ -23,13 +23,15 @@ public class GuestbookDao {
 		return list;
 	}
 
-	public int delete(GuestbookVo guestbookVo){
-		return sqlSession.delete("guestbook.delete", guestbookVo);
+	public boolean delete(GuestbookVo guestbookVo){
+		return 1==sqlSession.delete("guestbook.delete", guestbookVo);
 	}
 
 	public long insert(GuestbookVo guestbookVo){
-		sqlSession.insert("guestbook.insert", guestbookVo);
-		long no = guestbookVo.getNo();
+		long no=0;
+		if(sqlSession.insert("guestbook.insert", guestbookVo)==1) {
+		 no = guestbookVo.getNo();
+		}
 		return no;
 	}
 

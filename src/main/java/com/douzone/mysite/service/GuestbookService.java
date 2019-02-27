@@ -18,11 +18,16 @@ public class GuestbookService {
 		return guestbookDao.getList();
 	}
 	
-	public void write(GuestbookVo guestbookVo) {
-		guestbookDao.insert(guestbookVo);
+	public GuestbookVo write(GuestbookVo guestbookVo) {
+		return guestbookDao.get(guestbookDao.insert(guestbookVo));
 	}
 	
-	public void delete(GuestbookVo guestbookVo) {
-		guestbookDao.delete(guestbookVo);
+	public boolean delete(GuestbookVo guestbookVo) {
+		return guestbookDao.delete(guestbookVo);
+	}
+	
+	public List<GuestbookVo> ajaxRead(int page){
+		List<GuestbookVo> list = guestbookDao.getList(page); 
+		return list;
 	}
 }

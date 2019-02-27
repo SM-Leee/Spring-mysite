@@ -40,7 +40,7 @@
 				+ "</p>" + "<strong></strong>" + "<a href='' data-no='"+vo.no+"'>삭제</a>"
 				+ "</li>";
 
-		if (mode = true) {
+		if (mode == false) {
 			$("#list-guestbook").append(htmls);
 		} else {
 			$("#list-guestbook").prepend(htmls);
@@ -68,7 +68,7 @@
 		++page;
 
 		$.ajax({
-			url : "/mysite2/api/guestbook?a=ajax-list&p=" + page,
+			url : "/mysite3/guestbook/api/ajax-list?page=" + page,
 			type : "get",
 			dataType : "json",
 			data : "",
@@ -108,23 +108,22 @@
 					console.log(password);
 					
 					$.ajax({
-						url:"/mysite2/api/guestbook",
+						url:"/mysite3/guestbook/api/ajax-delete",
 						type:"post",
 						dataType:"json",
-						data : "a=ajax-delete&no="+no+"&password="+password,
+						data : "no="+no+"&password="+password,
 						success: function(response){
-							if(response.result == 1){
+														
+							if(response.data){ //true
+								console.log("삭제성공");
 								$("#password-delete").val("");
 								dialogDelete.dialog("close");
 								$("#list-guestbook li[data-no="+no+"]").remove();
 							} else {
+								console.log("삭제실패");
 								
-								$(".validateTips-normal").css({
-									display: "none"
-								});
-								$(".validateTips-error").css({
-									display:""
-								});
+								$(".validateTips-error").show();
+								
 								// dialog clear
 								$("#password-delete").val("");
 							}
@@ -136,6 +135,8 @@
 				},
 				"취소": function() {
 					dialogDelete.dialog("close");
+					$('.validateTips-error').hide();
+					$("#password-delete").val("");
 				}				
 			},
 			close: function(){
@@ -149,7 +150,9 @@
 			event.preventDefault();
 			
 			no = $(this).data("no");
-			console.log("click" + no);
+			console.log("click" + no);	
+				
+			$('#hidden-no').val(no);	
 			dialogDelete.dialog("open");
 		});
 
@@ -177,12 +180,10 @@
 					}
 
 					$.ajax({
-						url : "/mysite2/api/guestbook?a=ajax-insert&name="
-								+ name + "&password=" + password + "&text="
-								+ text,
-						type : "get",
+						url : "/mysite3/guestbook/api/ajax-insert",
+						type : "post",
 						dataType : "json",
-						data : "",
+						data : "name="+name+"&password="+password+"&text="+text,
 						success : function(response) {
 
 							if (response.result == "fail") {
@@ -190,8 +191,11 @@
 								return;
 							}
 							console.log(response.data);
-							fetchList();
-
+							render(response.data, true);
+							
+							//fetchList();
+							$( "#add-form" )[0].reset();
+							
 						},
 						error : function(xhr, status, e) {
 							console.error(status + ":" + e);
@@ -211,14 +215,14 @@
 			var windowHeight = $window.height();
 			var documentHeight = $(document).height();
 
-			//console.log(scrollTop+":"+windowHeight+":"+documentHeight);
 			if (scrollTop + windowHeight + 10 > documentHeight) {
 				console.log("fetch ajax start...");
+				fetchList();
 			}
 		});
 
 		//최초 리스트 가져오기
-		//fetchList();
+		fetchList();
 	});
 </script>
 
@@ -246,8 +250,8 @@
 
 			</div>
 			<div id="dialog-delete-form" title="메세지 삭제" style="display: none">
-				<p class="validateTips normal">작성시 입력했던 비밀번호를 입력하세요.</p>
-				<p class="validateTips error" style="display: none">비밀번호가 틀립니다.</p>
+				<p class="validateTips-normal">작성시 입력했던 비밀번호를 입력하세요.</p>
+				<p class="validateTips-error" style="color:red;display: none">비밀번호가 틀립니다.</p>
 				<form>
 					<input type="password" id="password-delete" value=""
 						class="text ui-widget-content ui-corner-all"> <input

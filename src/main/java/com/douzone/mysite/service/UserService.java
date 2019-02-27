@@ -1,7 +1,5 @@
 package com.douzone.mysite.service;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ public class UserService {
 		return userDao.get(email, password);
 	}
 	
-	public void logout(HttpSession session) {
+	public void logout() {
 	}
 	
 	public UserVo modifyselect(UserVo userVo) {

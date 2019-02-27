@@ -31,4 +31,10 @@
 			delete from guestbook where no=#{no } and password=password(#{password })
 		]]>
 	</delete>
+	
+	<select id="getNo" resultType="guestbookvo" parameterType="long">
+		<![CDATA[
+			select no, name, message, reg_date from guestbook where no=#{no}
+		]]>
+	</select>
 </mapper>
