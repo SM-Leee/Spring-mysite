@@ -48,7 +48,7 @@
 									<td>${vo.name }</td>
 									<td>${vo.reg_date }</td>
 									<td><a
-										href="${pageContext.servletContext.contextPath }/guestbook/delete?no=${vo.no }">삭제</a></td>
+										href="${pageContext.servletContext.contextPath }/guestbook/delete/${vo.no }">삭제</a></td>
 								</tr>
 								<tr>
 									<td colspan=4> ${fn:replace(vo.message, newline,"<br>") }</td>

@@ -1,14 +1,11 @@
 package com.douzone.mysite.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.douzone.mysite.service.UserService;
 import com.douzone.mysite.vo.UserVo;
 import com.douzone.security.Auth;
-import com.douzone.security.Auth.Role;
 import com.douzone.security.AuthUser;
 
 @Controller
@@ -26,7 +22,7 @@ public class UserController {
 	private UserService userService;
 
 	@RequestMapping(value="/join",method = RequestMethod.GET)
-	public String join() {
+	public String join(@ModelAttribute UserVo userVo) {
 		return "user/join";
 	}
 

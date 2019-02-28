@@ -25,7 +25,7 @@
 						class="block-label">패스워드</label> <input name="password"
 						type="password" value="">
 					<c:if test='${result == "fail" or param.result == "fail" }'>
-						<p>로그인이 실패 했습니다.</p>
+						<p style="color:red;font-weight: bold;">로그인이 실패 했습니다.</p>
 
 					</c:if>
 					<input type="submit" value="로그인">

@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -106,7 +107,9 @@
 		<div id="content">
 			<div id="user">
 
-				<form id="join-form" name="joinForm" method="post"
+				<form:form 
+				modelAttribute="userVo"
+				id="join-form" name="joinForm" method="post"
 					action="${pageContext.servletContext.contextPath }/user/join">
 					<label class="block-label" for="name">이름</label> <input id="name"
 						name="name" type="text" value="${userVo.name }">
@@ -123,20 +126,21 @@
 						</c:if>
 					</spring:hasBindErrors>
 
-					<label class="block-label" for="email">이메일</label> <input
-						id="email" name="email" type="text" value="${userVo.email }">
-					<spring:hasBindErrors name="userVo">
-						<c:if test="${errors.hasFieldErrors('email') }">
-						<p style="text-align:left; color:red;">
-							<strong>${errors.getFieldError( 'email' ).defaultMessage }</strong>
-						</p>
-						</c:if>
-					</spring:hasBindErrors>
+					<label class="block-label" for="email">이메일</label> 
+					<form:input path="email"/>
+					<p style="margin:0;padding:0;font-weight:bold;color:red;text-align:left;">
+					<form:errors path="email"/>
+					</p>
+					
 					<img id="img-checkemail" style="width: 20px; display: none;"
 						src="${pageContext.servletContext.contextPath }/assets/images/check.png" />
-					<input id="btn-checkemail" type="button" value="이메일확인"> <label
-						class="block-label">비밀번호</label> <input name="password"
-						type="password" value="">
+					<input id="btn-checkemail" type="button" value="이메일확인"> 
+					
+					<label class="block-label">비밀번호</label> 
+					<form:input path="password"/>
+					<p style="margin:0;padding:0;font-weight:bold;color:red;text-align:left;">
+					<form:errors path="password"/>
+					</p>
 
 					<fieldset>
 						<legend>성별</legend>
@@ -152,8 +156,10 @@
 					</fieldset>
 
 					<input type="submit" value="가입하기">
+					
+					
 
-				</form>
+				</form:form>
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/includes/navigation.jsp" />
